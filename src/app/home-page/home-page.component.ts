@@ -6,6 +6,7 @@ import { Bill } from '../models/bill';
 import { BillDetails } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-home-page',
@@ -64,6 +65,7 @@ export class HomePageComponent implements OnInit {
     private billService: HomePageService
   ) {}
   ngOnInit() {
+    initFlowbite();
     this.billService.getAllBills().subscribe((res) => {
       this.listData = res;
     });
