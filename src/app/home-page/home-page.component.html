@@ -1,0 +1,38 @@
+<header class="p-4">
+  <h1 class="text-center text-3xl text-pretty">
+    Bienvenido a <span class="text-[#fe6960]"> Billing App </span>
+  </h1>
+</header>
+
+<section>
+  <table class="w-full text-sm text-left text-gray-500">
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-100 [&>tr>th]:px-6 [&>tr>th]:py-3"
+    >
+      <tr class="rounded-3xl">
+        <th scope="col" class="">ID</th>
+        <th scope="col" class="">Folio</th>
+        <th scope="col" class="">Serie</th>
+        <th scope="col" class="">Fecha</th>
+        <th scope="col" class="">Forma de pago</th>
+        <th scope="col" class="">Total</th>
+        <th scope="col" class="">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (bill of listData; track bill.id) {
+      <tr class="[&>td]:px-6 [&>td]:py-3 text-pretty">
+        <td scope="col">{{ bill.id }}</td>
+        <td scope="col">{{ bill.invoice }}</td>
+        <td scope="col">{{ bill.serialNumber }}</td>
+        <td scope="col">{{ bill.date }}</td>
+        <td scope="col">{{ bill.paymentType }}</td>
+        <td scope="col">{{ bill.total }}</td>
+        <td scope="col">
+          
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
