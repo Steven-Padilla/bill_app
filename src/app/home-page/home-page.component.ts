@@ -5,14 +5,24 @@ import { HomePageService } from '../services/home-page.service';
 import { Bill } from '../models/bill';
 import { BillDetails } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
+import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule, ReactiveFormsModule],
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent implements OnInit {
+  formBill = new FormGroup({
+    serialNumber: new FormControl(),
+    folio: new FormControl(''),
+    date: new FormControl(''),
+    paymentType: new FormControl('Targeta'),
+    total: new FormControl(),
+    issuingId: new FormControl(),
+    receiverId: new FormControl(),
+  });
   listData = [
     new Bill(
       0,
@@ -46,6 +56,8 @@ export class HomePageComponent implements OnInit {
       ]
     ),
   ];
+  listIssuing: Array<Stakeholder> = [];
+  listReceiver: Array<Stakeholder> = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -55,5 +67,15 @@ export class HomePageComponent implements OnInit {
     this.billService.getAllBills().subscribe((res) => {
       this.listData = res;
     });
+    this.billService.getStakeholder('emisor').subscribe((res) => {
+      this.listIssuing = res;
+    });
+    this.billService.getStakeholder('receptor').subscribe((res) => {
+      this.listReceiver = res;
+    });
+  }
+  onSubmit() {
+    // TODO: Use EventEmitter with form value
+    console.warn(this.formBill.value);
   }
 }
