@@ -38,8 +38,8 @@ export class HomePageComponent implements OnInit {
     serialNumber: new FormControl(),
     id: new FormControl(),
     folio: new FormControl(),
-    date: new FormControl(''),
-    paymentType: new FormControl('Targeta'),
+    date: new FormControl(),
+    paymentType: new FormControl(),
     total: new FormControl(),
     issuingId: new FormControl(),
     receiverId: new FormControl(),
@@ -112,13 +112,16 @@ export class HomePageComponent implements OnInit {
       }),
     ];
     this.modalAction = 'new';
-    this.formBill.value.date = '';
-    this.formBill.value.folio = '';
-    this.formBill.value.issuingId = '';
-    this.formBill.value.receiverId = '';
-    this.formBill.value.paymentType = '';
-    this.formBill.value.serialNumber = '';
-    this.formBill.value.total = '';
+    this.formBill.setValue({
+      date: null,
+      folio: null,
+      issuingId: null,
+      receiverId: null,
+      paymentType: null,
+      serialNumber: null,
+      total: null,
+      id: null,
+    });
   }
 
   setForm(editingBill: Bill, action: string) {
@@ -140,20 +143,22 @@ export class HomePageComponent implements OnInit {
     if (action == 'view') {
       for (var i = 0; i < this.listDetailsHandler.length; i++) {
         this.listDetailsHandler[i].disable();
-        console.log(this.listDetailsHandler[i]);
       }
       this.formBill.disable();
     } else {
       this.formBill.enable();
     }
-    this.formBill.value.id = editingBill.id;
-    this.formBill.value.date = editingBill.date;
-    this.formBill.value.folio = editingBill.invoice;
-    this.formBill.value.issuingId = editingBill.issuing?.id ?? 0;
-    this.formBill.value.receiverId = editingBill.receiver?.id ?? 0;
-    this.formBill.value.paymentType = editingBill.paymentType;
-    this.formBill.value.serialNumber = editingBill.serialNumber;
-    this.formBill.value.total = editingBill.total;
+
+    this.formBill.setValue({
+      date: editingBill.date,
+      folio: editingBill.invoice,
+      issuingId: editingBill.issuing?.id,
+      receiverId: editingBill.receiver?.id,
+      paymentType: editingBill.paymentType,
+      serialNumber: editingBill.serialNumber,
+      total: editingBill.total,
+      id: editingBill.id,
+    });
   }
 
   addDetail() {
@@ -168,8 +173,5 @@ export class HomePageComponent implements OnInit {
       })
     );
     console.log(this.listDetailsHandler);
-  }
-  saveDetails(index: number) {
-    console.log(this.listDetailsHandler[index].value);
   }
 }

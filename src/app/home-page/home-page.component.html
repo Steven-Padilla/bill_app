@@ -253,6 +253,7 @@
             <select
               id="paymentType"
               formControlName="paymentType"
+              name="paymentType"
               value="{{ formBill.value.paymentType }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
@@ -271,6 +272,7 @@
             <select
               id="issuing"
               formControlName="issuingId"
+              name="issuing"
               value="{{ formBill.value.issuingId }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
@@ -291,12 +293,15 @@
             <select
               id="receiver"
               formControlName="receiverId"
+              name="receiver"
               value="{{ formBill.value.receiverId }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               @for (single of listReceiver; track $index) {
 
-              <option value="{{ single.id }}">{{ single.name }}</option>
+              <option value="{{ single.id }}">
+                {{ single.name }}
+              </option>
               }
             </select>
           </div>
