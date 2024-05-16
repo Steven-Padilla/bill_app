@@ -3,7 +3,7 @@ import { Stakeholder } from '../models/stakeholder';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomePageService } from '../services/home-page.service';
 import { Bill } from '../models/bill';
-import { BillDetails } from '../models/billdetails';
+import { BillDetails, BillDetailsDTO } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -64,7 +64,8 @@ export class HomePageComponent implements OnInit {
           2,
           50.0,
           'Description of product 1',
-          100
+          100,
+          0
         ),
         new BillDetails(
           0,
@@ -72,7 +73,8 @@ export class HomePageComponent implements OnInit {
           1,
           100.0,
           'Description of product 2',
-          100
+          100,
+          0
         ),
       ]
     ),
@@ -116,12 +118,50 @@ export class HomePageComponent implements OnInit {
       )!,
       []
     );
-
-    this.billService.insertBill(newBill).subscribe((res) => {
-      this.listData.push(res);
-      this.toaster.success('Factura guardada correctamente', 'TODO OK :)');
-      console.log(res);
-    });
+    if (this.modalAction == 'new') {
+      this.billService.insertBill(newBill).subscribe((res) => {
+        for (var i = 0; i < this.listDetailsHandler.length; i++) {
+          const newBilldetail = new BillDetailsDTO(
+            this.listDetailsHandler[i].value.item,
+            this.listDetailsHandler[i].value.quantity,
+            this.listDetailsHandler[i].value.singlePrice,
+            this.listDetailsHandler[i].value.description,
+            this.listDetailsHandler[i].value.singlePrice *
+              this.listDetailsHandler[i].value.quantity,
+            res.id
+          );
+          this.billService
+            .insertDetail(newBilldetail)
+            .subscribe((detailResponse) => {
+              console.log(detailResponse);
+            });
+        }
+        this.listData.push(res);
+        this.ngOnInit();
+        this.toaster.success('Factura guardada correctamente', 'TODO OK :)');
+      });
+    } else {
+      this.billService.updateBill(newBill).subscribe((res) => {
+        for (var i = 0; i < this.listDetailsHandler.length; i++) {
+          const newBilldetail = new BillDetails(
+            this.listDetailsHandler[i].value.id,
+            this.listDetailsHandler[i].value.item,
+            this.listDetailsHandler[i].value.quantity,
+            this.listDetailsHandler[i].value.singlePrice,
+            this.listDetailsHandler[i].value.description,
+            this.listDetailsHandler[i].value.singlePrice *
+              this.listDetailsHandler[i].value.quantity,
+            res.id
+          );
+          this.billService
+            .updateDetail(newBilldetail)
+            .subscribe((detailResponse) => {
+              this.ngOnInit();
+            });
+        }
+        this.toaster.success('Factura editada correctamente', 'TODO OK :)');
+      });
+    }
   }
 
   clearData() {
@@ -151,6 +191,7 @@ export class HomePageComponent implements OnInit {
   setForm(editingBill: Bill, action: string) {
     this.modalAction = action;
     this.listDetailsHandler = [];
+    console.log(editingBill);
 
     for (var i = 0; i < editingBill.billDetails.length; i++) {
       this.listDetailsHandler.push(

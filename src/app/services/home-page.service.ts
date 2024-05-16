@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Bill } from '../models/bill';
 import { Stakeholder } from '../models/stakeholder';
+import { BillDetails, BillDetailsDTO } from '../models/billdetails';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,30 @@ export class HomePageService {
     return response;
   }
   insertBill(bill: Bill) {
+    var response = this.http.post<Bill>(
+      `http://localhost:8080/api/v1/bill?issuing=${bill.issuing.id}&receiver=${bill.receiver.id}`,
+      bill,
+      { headers: this.headers }
+    );
+    return response;
+  }
+  insertDetail(details: BillDetailsDTO) {
+    var response = this.http.post<BillDetails>(
+      `http://localhost:8080/api/v1/bill/details`,
+      details,
+      { headers: this.headers }
+    );
+    return response;
+  }
+  updateDetail(details: BillDetails) {
+    var response = this.http.post<BillDetails>(
+      `http://localhost:8080/api/v1/bill/details`,
+      details,
+      { headers: this.headers }
+    );
+    return response;
+  }
+  updateBill(bill: Bill) {
     var response = this.http.post<Bill>(
       `http://localhost:8080/api/v1/bill?issuing=${bill.issuing.id}&receiver=${bill.receiver.id}`,
       bill,

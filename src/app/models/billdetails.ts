@@ -5,6 +5,7 @@ export class BillDetails {
   singlePrice: number;
   description: string;
   total: number;
+  details_id: number;
 
   constructor(
     id: number,
@@ -12,7 +13,8 @@ export class BillDetails {
     quantity: number,
     singlePrice: number,
     description: string,
-    total: number
+    total: number,
+    details_id: number
   ) {
     this.id = id;
     this.item = item;
@@ -20,5 +22,31 @@ export class BillDetails {
     this.singlePrice = singlePrice;
     this.description = description;
     this.total = total;
+    this.details_id = details_id;
+  }
+}
+
+export class BillDetailsDTO {
+  item: string;
+  quantity: number;
+  singlePrice: number;
+  description: string;
+  total: number;
+  details_id: number;
+
+  constructor(
+    item: string,
+    quantity: number,
+    singlePrice: number,
+    description: string,
+    total: number,
+    details_id: number
+  ) {
+    this.item = item;
+    this.quantity = quantity;
+    this.singlePrice = singlePrice;
+    this.description = description;
+    this.total = total;
+    this.details_id = details_id;
   }
 }
