@@ -15,6 +15,25 @@ import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 })
 export class HomePageComponent implements OnInit {
   modalAction: string = 'new';
+  listDetailsHandler: Array<
+    FormGroup<{
+      id: FormControl<any>;
+      item: FormControl<any>;
+      quantity: FormControl<any>;
+      singlePrice: FormControl<any>;
+      description: FormControl<any>;
+      total: FormControl<any>;
+    }>
+  > = [
+    new FormGroup({
+      id: new FormControl(),
+      item: new FormControl(),
+      quantity: new FormControl(),
+      singlePrice: new FormControl(),
+      description: new FormControl(),
+      total: new FormControl(),
+    }),
+  ];
   formBill = new FormGroup({
     serialNumber: new FormControl(),
     id: new FormControl(),
@@ -60,8 +79,7 @@ export class HomePageComponent implements OnInit {
   ];
   listIssuing: Array<Stakeholder> = [];
   listReceiver: Array<Stakeholder> = [];
-  listDetails: Array<BillDetails> = [];
-  billAux: Bill = Bill.getEmtyBill;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -83,6 +101,16 @@ export class HomePageComponent implements OnInit {
   }
 
   clearData() {
+    this.listDetailsHandler = [
+      new FormGroup({
+        id: new FormControl(),
+        item: new FormControl(),
+        quantity: new FormControl(),
+        singlePrice: new FormControl(),
+        description: new FormControl(),
+        total: new FormControl(),
+      }),
+    ];
     this.modalAction = 'new';
     this.formBill.value.date = '';
     this.formBill.value.folio = '';
@@ -91,17 +119,33 @@ export class HomePageComponent implements OnInit {
     this.formBill.value.paymentType = '';
     this.formBill.value.serialNumber = '';
     this.formBill.value.total = '';
-    this.listDetails = [new BillDetails(0, '', 0, 0, '', 0)];
   }
 
   setForm(editingBill: Bill, action: string) {
     this.modalAction = action;
+    this.listDetailsHandler = [];
+
+    for (var i = 0; i < editingBill.billDetails.length; i++) {
+      this.listDetailsHandler.push(
+        new FormGroup({
+          id: new FormControl(editingBill.billDetails[i].id),
+          item: new FormControl(editingBill.billDetails[i].item),
+          quantity: new FormControl(editingBill.billDetails[i].quantity),
+          singlePrice: new FormControl(editingBill.billDetails[i].singlePrice),
+          description: new FormControl(editingBill.billDetails[i].description),
+          total: new FormControl(editingBill.billDetails[i].total),
+        })
+      );
+    }
     if (action == 'view') {
+      for (var i = 0; i < this.listDetailsHandler.length; i++) {
+        this.listDetailsHandler[i].disable();
+        console.log(this.listDetailsHandler[i]);
+      }
       this.formBill.disable();
     } else {
       this.formBill.enable();
     }
-    this.listDetails = editingBill.billDetails;
     this.formBill.value.id = editingBill.id;
     this.formBill.value.date = editingBill.date;
     this.formBill.value.folio = editingBill.invoice;
@@ -110,5 +154,22 @@ export class HomePageComponent implements OnInit {
     this.formBill.value.paymentType = editingBill.paymentType;
     this.formBill.value.serialNumber = editingBill.serialNumber;
     this.formBill.value.total = editingBill.total;
+  }
+
+  addDetail() {
+    this.listDetailsHandler.push(
+      new FormGroup({
+        id: new FormControl(),
+        item: new FormControl(),
+        quantity: new FormControl(),
+        singlePrice: new FormControl(),
+        description: new FormControl(),
+        total: new FormControl(),
+      })
+    );
+    console.log(this.listDetailsHandler);
+  }
+  saveDetails(index: number) {
+    console.log(this.listDetailsHandler[index].value);
   }
 }
