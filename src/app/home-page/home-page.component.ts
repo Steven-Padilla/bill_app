@@ -152,8 +152,8 @@ export class HomePageComponent implements OnInit {
     this.formBill.setValue({
       date: editingBill.date,
       folio: editingBill.invoice,
-      issuingId: editingBill.issuing?.id,
-      receiverId: editingBill.receiver?.id,
+      issuingId: editingBill.issuing?.id ?? null,
+      receiverId: editingBill.receiver?.id ?? null,
       paymentType: editingBill.paymentType,
       serialNumber: editingBill.serialNumber,
       total: editingBill.total,
