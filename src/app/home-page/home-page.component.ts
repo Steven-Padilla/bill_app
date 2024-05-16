@@ -60,6 +60,8 @@ export class HomePageComponent implements OnInit {
   ];
   listIssuing: Array<Stakeholder> = [];
   listReceiver: Array<Stakeholder> = [];
+  listDetails: Array<BillDetails> = [];
+  billAux: Bill = Bill.getEmtyBill;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -77,7 +79,6 @@ export class HomePageComponent implements OnInit {
     });
   }
   onSubmit() {
-    // TODO: Use EventEmitter with form value
     console.warn(this.formBill.value);
   }
 
@@ -90,6 +91,7 @@ export class HomePageComponent implements OnInit {
     this.formBill.value.paymentType = '';
     this.formBill.value.serialNumber = '';
     this.formBill.value.total = '';
+    this.listDetails = [new BillDetails(0, '', 0, 0, '', 0)];
   }
 
   setForm(editingBill: Bill, action: string) {
@@ -99,6 +101,7 @@ export class HomePageComponent implements OnInit {
     } else {
       this.formBill.enable();
     }
+    this.listDetails = editingBill.billDetails;
     this.formBill.value.id = editingBill.id;
     this.formBill.value.date = editingBill.date;
     this.formBill.value.folio = editingBill.invoice;

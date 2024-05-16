@@ -133,7 +133,7 @@
   aria-hidden="true"
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
-  <div class="relative p-4 w-full max-w-md max-h-full">
+  <div class="relative p-4 w-full max-w-4xl max-h-full">
     <!-- Modal content -->
     <div class="relative bg-white rounded-lg shadow">
       <!-- Modal header -->
@@ -295,25 +295,155 @@
               }
             </select>
           </div>
-        </div>
-        <button
-          type="submit"
-          class="text-white inline-flex items-center bg-appRed hover:bg-green-400 hover:text-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          <svg
-            class="me-1 -ms-1 w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
+          @for (singleDetails of listDetails; track $index) {
+          <div
+            class="pt-2 {{
+              listDetails.length > 1 ? 'col-span-1' : 'col-span-2'
+            }}"
+            id="accordion-color"
+            data-accordion="collapse"
+            data-active-classes="bg-blue-100 text-blue-600"
           >
-            <path
-              fill-rule="evenodd"
-              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          Agregar factura
-        </button>
+            <h2
+              class="text-center text-2xl text-pretty font-medium text-appRed"
+            >
+              Detalle #{{ $index + 1 }}
+            </h2>
+            <hr class="text-black" />
+            <div class="grid gap-4 mb-4 grid-cols-2">
+              <div class="col-span-1 pt-3">
+                <label
+                  for="itemDetail"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Artículo</label
+                >
+                <input
+                  type="text"
+                  name="itemDetail"
+                  id="itemDetail"
+                  value="{{ singleDetails.item }}"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Ingrea un articulo"
+                  required="true"
+                />
+              </div>
+              <div class="col-span-1 pt-3">
+                <label
+                  for="price"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Precio</label
+                >
+                <input
+                  type="number"
+                  name="price"
+                  id="price"
+                  value="{{ singleDetails.singlePrice }}"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Precio del artículo"
+                  required="true"
+                />
+              </div>
+              <div class="col-span-1">
+                <label
+                  for="quantity"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Cantidad</label
+                >
+                <input
+                  type="number"
+                  name="quantity"
+                  id="quantity"
+                  value="{{ singleDetails.quantity }}"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Cantidad de artículos"
+                  required="true"
+                />
+              </div>
+              <div class="col-span-1">
+                <label
+                  for="detailTotal"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >total</label
+                >
+                <input
+                  type="number"
+                  name="detailTotal"
+                  id="detailTotal"
+                  value="{{ singleDetails.total }}"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Total"
+                  required="true"
+                />
+              </div>
+              <div class="col-span-2">
+                <label
+                  for="description"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Descripción</label
+                >
+                <input
+                  type="text"
+                  name="description"
+                  id="description"
+                  value="{{ singleDetails.description }}"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Ingresa una descripción"
+                  required="true"
+                />
+              </div>
+            </div>
+            @if (modalAction!="view") {
+
+            <div class="flex justify-between">
+              <button
+                type="button"
+                class="text-white inline-flex items-center bg-blue-600 hover:bg-blue-500 transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Editar detalle
+              </button>
+              @if (listDetails.length>1) {
+
+              <button
+                type="button"
+                class="text-white inline-flex items-center bg-appRed hover:bg-red-600 transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Eliminar
+              </button>
+              }
+            </div>
+            }
+          </div>
+
+          }
+        </div>
+        @if (modalAction!="view") {
+        <div class="flex gap-4">
+          <button
+            type="submit"
+            class="text-xl text-white hover:text-black items-center bg-green-500 w-full hover:border hover:bg-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center flex justify-center"
+          >
+            Confirmar cambios
+          </button>
+          <button
+            type="button"
+            class="text-xl text-white hover:text-black items-center bg-appOrange w-full hover:border hover:bg-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center flex justify-center"
+          >
+            <svg
+              class="me-1 -ms-1 w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            Agregar detalle
+          </button>
+        </div>
+        }
       </form>
     </div>
   </div>
