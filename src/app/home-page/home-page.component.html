@@ -184,7 +184,7 @@
               >Serie</label
             >
             <input
-              type="text"
+              type="number"
               name="serialNumber"
               formControlName="serialNumber"
               value="{{ formBill.value.serialNumber }}"
@@ -201,7 +201,7 @@
               >Folio</label
             >
             <input
-              type="text"
+              type="number"
               name="folio"
               id="folio"
               formControlName="folio"
@@ -433,6 +433,7 @@
       @if (modalAction!="view") {
       <div class="flex gap-4 flex-row-reverse">
         <button
+          data-modal-toggle="crud-modal"
           type="submit"
           (click)="onSubmit()"
           class="text-xl text-white hover:text-black items-center bg-green-500 w-full hover:border hover:bg-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center flex justify-center"

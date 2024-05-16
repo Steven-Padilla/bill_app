@@ -6,7 +6,7 @@ import { Bill } from '../models/bill';
 import { BillDetails } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-home-page',
   standalone: true,
@@ -83,8 +83,10 @@ export class HomePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private toaster: ToastrService,
     private billService: HomePageService
   ) {}
+
   ngOnInit() {
     this.billService.getAllBills().subscribe((res) => {
       this.listData = res;
@@ -97,7 +99,29 @@ export class HomePageComponent implements OnInit {
     });
   }
   onSubmit() {
-    console.warn(this.formBill.value);
+    this.toaster.show('Espera un momento', 'Enviando...');
+
+    const newBill = new Bill(
+      this.modalAction == 'new' ? null : this.formBill.value.id,
+      this.formBill.value.folio,
+      this.formBill.value.serialNumber,
+      this.formBill.value.date,
+      this.formBill.value.paymentType,
+      this.formBill.value.total,
+      this.listReceiver.find(
+        (item) => item.id == this.formBill.value.receiverId
+      )!,
+      this.listIssuing.find(
+        (item) => item.id == this.formBill.value.issuingId
+      )!,
+      []
+    );
+
+    this.billService.insertBill(newBill).subscribe((res) => {
+      this.listData.push(res);
+      this.toaster.success('Factura guardada correctamente', 'TODO OK :)');
+      console.log(res);
+    });
   }
 
   clearData() {

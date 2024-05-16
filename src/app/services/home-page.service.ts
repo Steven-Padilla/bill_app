@@ -8,29 +8,32 @@ import { Stakeholder } from '../models/stakeholder';
 })
 export class HomePageService {
   constructor(private http: HttpClient) {}
+  headers = new HttpHeaders().append(
+    'Authorization',
+    `Basic ${this.b64EncodeUnicode('user:123123')}`
+  );
   getAllBills() {
-    const headers = new HttpHeaders().append(
-      'Authorization',
-      `Basic ${this.b64EncodeUnicode('user:123123')}`
-    );
     var response = this.http.get<Array<Bill>>(
       'http://localhost:8080/api/v1/bill',
-      { headers: headers }
+      { headers: this.headers }
     );
 
     return response;
   }
 
   getStakeholder(type: string) {
-    const headers = new HttpHeaders().append(
-      'Authorization',
-      `Basic ${this.b64EncodeUnicode('user:123123')}`
-    );
     var response = this.http.get<Array<Stakeholder>>(
       `http://localhost:8080/api/v1/stakeholders/${type}`,
-      { headers: headers }
+      { headers: this.headers }
     );
-
+    return response;
+  }
+  insertBill(bill: Bill) {
+    var response = this.http.post<Bill>(
+      `http://localhost:8080/api/v1/bill?issuing=${bill.issuing.id}&receiver=${bill.receiver.id}`,
+      bill,
+      { headers: this.headers }
+    );
     return response;
   }
 
