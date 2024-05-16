@@ -6,7 +6,6 @@ import { Bill } from '../models/bill';
 import { BillDetails } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-home-page',
@@ -15,9 +14,11 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent implements OnInit {
+  modalAction: string = 'new';
   formBill = new FormGroup({
     serialNumber: new FormControl(),
-    folio: new FormControl(''),
+    id: new FormControl(),
+    folio: new FormControl(),
     date: new FormControl(''),
     paymentType: new FormControl('Targeta'),
     total: new FormControl(),
@@ -65,7 +66,6 @@ export class HomePageComponent implements OnInit {
     private billService: HomePageService
   ) {}
   ngOnInit() {
-    initFlowbite();
     this.billService.getAllBills().subscribe((res) => {
       this.listData = res;
     });
@@ -79,5 +79,33 @@ export class HomePageComponent implements OnInit {
   onSubmit() {
     // TODO: Use EventEmitter with form value
     console.warn(this.formBill.value);
+  }
+
+  clearData() {
+    this.modalAction = 'new';
+    this.formBill.value.date = '';
+    this.formBill.value.folio = '';
+    this.formBill.value.issuingId = '';
+    this.formBill.value.receiverId = '';
+    this.formBill.value.paymentType = '';
+    this.formBill.value.serialNumber = '';
+    this.formBill.value.total = '';
+  }
+
+  setForm(editingBill: Bill, action: string) {
+    this.modalAction = action;
+    if (action == 'view') {
+      this.formBill.disable();
+    } else {
+      this.formBill.enable();
+    }
+    this.formBill.value.id = editingBill.id;
+    this.formBill.value.date = editingBill.date;
+    this.formBill.value.folio = editingBill.invoice;
+    this.formBill.value.issuingId = editingBill.issuing?.id ?? 0;
+    this.formBill.value.receiverId = editingBill.receiver?.id ?? 0;
+    this.formBill.value.paymentType = editingBill.paymentType;
+    this.formBill.value.serialNumber = editingBill.serialNumber;
+    this.formBill.value.total = editingBill.total;
   }
 }

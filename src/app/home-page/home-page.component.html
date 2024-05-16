@@ -7,7 +7,8 @@
 <button
   data-modal-target="crud-modal"
   data-modal-toggle="crud-modal"
-  class="flex text-white bg-appRed hover:bg-appOrange focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all hover:text-appRed"
+  (click)="clearData()"
+  class="flex text-white bg-appRed hover:bg-green-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all"
   type="button"
 >
   <svg
@@ -52,7 +53,12 @@
           scope="col"
           class="flex gap-2 justify-center [&>button]:transition-all [&>button]:duration-700 [&>button]:rounded-full"
         >
-          <button class="w-12 hover:bg-[#fefac2] p-1">
+          <button
+            class="w-12 hover:bg-[#fefac2] p-1"
+            data-modal-toggle="crud-modal"
+            (click)="setForm(bill, 'edit')"
+            type="button"
+          >
             <svg
               viewBox="0 -0.5 25 25"
               fill="none"
@@ -64,7 +70,11 @@
               />
             </svg>
           </button>
-          <button class="w-10 p-1 hover:bg-[#d2fdfe]">
+          <button
+            data-modal-toggle="crud-modal"
+            class="w-10 p-1 hover:bg-[#d2fdfe]"
+            (click)="setForm(bill, 'view')"
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -130,7 +140,12 @@
       <div
         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
       >
-        <h3 class="text-lg font-semibold text-gray-900">Nueva factura</h3>
+        <h3 class="text-lg font-semibold text-gray-900">
+          @if (modalAction == "edit") { Editar } @else if (modalAction=="new")
+          {Nueva} Factura @if (modalAction=="edit"||modalAction=="view") { #{{
+            formBill.value.id
+          }}}
+        </h3>
         <button
           type="button"
           class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
@@ -167,6 +182,7 @@
               type="text"
               name="serialNumber"
               formControlName="serialNumber"
+              value="{{ formBill.value.serialNumber }}"
               id="serialNumber"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="Numero de serie de la factura"
@@ -184,6 +200,7 @@
               name="folio"
               id="folio"
               formControlName="folio"
+              value="{{ formBill.value.folio }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="Folio"
               required="true"
@@ -199,6 +216,7 @@
               id="date"
               type="text"
               formControlName="date"
+              value="{{ formBill.value.date }}"
               class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Selecciona una fecha"
             />
@@ -215,6 +233,7 @@
               name="total"
               id="total"
               formControlName="total"
+              value="{{ formBill.value.total }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="$"
               required="true"
@@ -229,6 +248,7 @@
             <select
               id="paymentType"
               formControlName="paymentType"
+              value="{{ formBill.value.paymentType }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               <option value="Targeta">Targeta</option>
@@ -246,11 +266,14 @@
             <select
               id="issuing"
               formControlName="issuingId"
+              value="{{ formBill.value.issuingId }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               @for (single of listIssuing; track $index) {
 
-              <option value="{{ single.id }}">{{ single.name }}</option>
+              <option value="{{ single.id }}">
+                {{ single.name }}
+              </option>
               }
             </select>
           </div>
@@ -263,6 +286,7 @@
             <select
               id="receiver"
               formControlName="receiverId"
+              value="{{ formBill.value.receiverId }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               @for (single of listReceiver; track $index) {
@@ -274,7 +298,7 @@
         </div>
         <button
           type="submit"
-          class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          class="text-white inline-flex items-center bg-appRed hover:bg-green-400 hover:text-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <svg
             class="me-1 -ms-1 w-5 h-5"
