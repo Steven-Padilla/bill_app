@@ -134,10 +134,9 @@ export class HomePageComponent implements OnInit {
             .insertDetail(newBilldetail)
             .subscribe((detailResponse) => {
               console.log(detailResponse);
+              this.ngOnInit();
             });
         }
-        this.listData.push(res);
-        this.ngOnInit();
         this.toaster.success('Factura guardada correctamente', 'TODO OK :)');
       });
     } else {
