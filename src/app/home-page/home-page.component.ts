@@ -238,4 +238,17 @@ export class HomePageComponent implements OnInit {
     );
     console.log(this.listDetailsHandler);
   }
+
+  idToDelete: number = -1;
+  setDeleteItem(id: number) {
+    this.idToDelete = id;
+  }
+  deleteBill() {
+    this.toaster.warning('Espera un momento', 'Eliminando...');
+
+    this.billService.deleteBill(this.idToDelete).subscribe((res) => {
+      this.ngOnInit();
+      this.toaster.success('Factura eliminada con exito', 'TODO OK :)');
+    });
+  }
 }

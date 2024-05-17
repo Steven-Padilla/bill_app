@@ -13,6 +13,16 @@ export class HomePageService {
     'Authorization',
     `Basic ${this.b64EncodeUnicode('user:123123')}`
   );
+
+
+  deleteBill(id:number) {
+    var response = this.http.delete<Bill>(
+      `http://localhost:8080/api/v1/bill/${id}`,
+      { headers: this.headers }
+    );
+
+    return response;
+  }
   getAllBills() {
     var response = this.http.get<Array<Bill>>(
       'http://localhost:8080/api/v1/bill',
