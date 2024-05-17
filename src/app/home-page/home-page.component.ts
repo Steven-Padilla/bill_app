@@ -133,7 +133,6 @@ export class HomePageComponent implements OnInit {
           this.billService
             .insertDetail(newBilldetail)
             .subscribe((detailResponse) => {
-              console.log(detailResponse);
               this.ngOnInit();
             });
         }
@@ -190,7 +189,7 @@ export class HomePageComponent implements OnInit {
   setForm(editingBill: Bill, action: string) {
     this.modalAction = action;
     this.listDetailsHandler = [];
-    console.log(editingBill);
+    this.detailsIdToDelete = [];
 
     for (var i = 0; i < editingBill.billDetails.length; i++) {
       this.listDetailsHandler.push(
@@ -228,7 +227,7 @@ export class HomePageComponent implements OnInit {
   addDetail() {
     this.listDetailsHandler.push(
       new FormGroup({
-        id: new FormControl(),
+        id: new FormControl(this.listDetailsHandler.length - 10),
         item: new FormControl(),
         quantity: new FormControl(),
         singlePrice: new FormControl(),
@@ -236,7 +235,6 @@ export class HomePageComponent implements OnInit {
         total: new FormControl(),
       })
     );
-    console.log(this.listDetailsHandler);
   }
 
   idToDelete: number = -1;
@@ -250,5 +248,13 @@ export class HomePageComponent implements OnInit {
       this.ngOnInit();
       this.toaster.success('Factura eliminada con exito', 'TODO OK :)');
     });
+  }
+
+  detailsIdToDelete: Array<number> = [];
+  deleteDetailLocal(id: number) {
+    this.detailsIdToDelete.push(id);
+    this.listDetailsHandler = this.listDetailsHandler.filter(
+      (item) => item.value.id != id
+    );
   }
 }
