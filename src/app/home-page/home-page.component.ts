@@ -152,9 +152,10 @@ export class HomePageComponent implements OnInit {
             res.id
           );
           this.billService
-            .updateDetail(newBilldetail)
+            .updateDetail(newBilldetail,this.detailsIdToDelete)
             .subscribe((detailResponse) => {
               this.ngOnInit();
+
             });
         }
         this.toaster.success('Factura editada correctamente', 'TODO OK :)');

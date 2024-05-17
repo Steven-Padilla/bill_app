@@ -14,8 +14,14 @@ export class HomePageService {
     `Basic ${this.b64EncodeUnicode('user:123123')}`
   );
 
-
-  deleteBill(id:number) {
+  deleteDetail(id: number) {
+    var response = this.http.delete<Bill>(
+      `http://localhost:8080/api/v1/bill/details/${id}`,
+      { headers: this.headers }
+    );
+    return response;
+  }
+  deleteBill(id: number) {
     var response = this.http.delete<Bill>(
       `http://localhost:8080/api/v1/bill/${id}`,
       { headers: this.headers }
@@ -55,12 +61,20 @@ export class HomePageService {
     );
     return response;
   }
-  updateDetail(details: BillDetails) {
+  updateDetail(details: BillDetails, idsToDelete: Array<number>) {
     var response = this.http.post<BillDetails>(
       `http://localhost:8080/api/v1/bill/details`,
       details,
       { headers: this.headers }
     );
+    console.log(idsToDelete);
+    for (const item of idsToDelete) {
+      if (item > 0) {
+        this.deleteDetail(item).subscribe((data) => {
+          console.log(data);
+        });
+      }
+    }
     return response;
   }
   updateBill(bill: Bill) {
