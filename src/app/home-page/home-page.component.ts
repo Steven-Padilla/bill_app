@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { Stakeholder } from '../models/stakeholder';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomePageService } from '../services/home-page.service';
@@ -7,10 +7,13 @@ import { BillDetails, BillDetailsDTO } from '../models/billdetails';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [HttpClientModule, ReactiveFormsModule],
+  imports: [HttpClientModule, ReactiveFormsModule, CommonModule],
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent implements OnInit {
@@ -87,7 +90,9 @@ export class HomePageComponent implements OnInit {
     private router: Router,
     private toaster: ToastrService,
     private billService: HomePageService
-  ) {}
+  ) {
+  }
+
 
   ngOnInit() {
     this.billService.getAllBills().subscribe((res) => {
@@ -152,10 +157,9 @@ export class HomePageComponent implements OnInit {
             res.id
           );
           this.billService
-            .updateDetail(newBilldetail,this.detailsIdToDelete)
+            .updateDetail(newBilldetail, this.detailsIdToDelete)
             .subscribe((detailResponse) => {
               this.ngOnInit();
-
             });
         }
         this.toaster.success('Factura editada correctamente', 'TODO OK :)');

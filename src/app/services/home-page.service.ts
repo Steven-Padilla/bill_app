@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { Bill } from '../models/bill';
 import { Stakeholder } from '../models/stakeholder';
 import { BillDetails, BillDetailsDTO } from '../models/billdetails';
@@ -9,22 +9,23 @@ import { BillDetails, BillDetailsDTO } from '../models/billdetails';
 })
 export class HomePageService {
   constructor(private http: HttpClient) {}
-  headers = new HttpHeaders().append(
+  //TODO:implements dynamic user/password
+  header = new HttpHeaders().append(
     'Authorization',
-    `Basic ${this.b64EncodeUnicode('user:123123')}`
+    `Basic ${this.b64EncodeUnicode(`admin:123123`)}`
   );
 
   deleteDetail(id: number) {
     var response = this.http.delete<Bill>(
       `http://localhost:8080/api/v1/bill/details/${id}`,
-      { headers: this.headers }
+      { headers: this.header }
     );
     return response;
   }
   deleteBill(id: number) {
     var response = this.http.delete<Bill>(
       `http://localhost:8080/api/v1/bill/${id}`,
-      { headers: this.headers }
+      { headers: this.header }
     );
 
     return response;
@@ -32,7 +33,7 @@ export class HomePageService {
   getAllBills() {
     var response = this.http.get<Array<Bill>>(
       'http://localhost:8080/api/v1/bill',
-      { headers: this.headers }
+      { headers: this.header }
     );
 
     return response;
@@ -41,7 +42,7 @@ export class HomePageService {
   getStakeholder(type: string) {
     var response = this.http.get<Array<Stakeholder>>(
       `http://localhost:8080/api/v1/stakeholders/${type}`,
-      { headers: this.headers }
+      { headers: this.header }
     );
     return response;
   }
@@ -49,7 +50,7 @@ export class HomePageService {
     var response = this.http.post<Bill>(
       `http://localhost:8080/api/v1/bill?issuing=${bill.issuing.id}&receiver=${bill.receiver.id}`,
       bill,
-      { headers: this.headers }
+      { headers: this.header }
     );
     return response;
   }
@@ -57,7 +58,7 @@ export class HomePageService {
     var response = this.http.post<BillDetails>(
       `http://localhost:8080/api/v1/bill/details`,
       details,
-      { headers: this.headers }
+      { headers: this.header }
     );
     return response;
   }
@@ -65,9 +66,8 @@ export class HomePageService {
     var response = this.http.post<BillDetails>(
       `http://localhost:8080/api/v1/bill/details`,
       details,
-      { headers: this.headers }
+      { headers: this.header }
     );
-    console.log(idsToDelete);
     for (const item of idsToDelete) {
       if (item > 0) {
         this.deleteDetail(item).subscribe((data) => {
@@ -81,7 +81,15 @@ export class HomePageService {
     var response = this.http.post<Bill>(
       `http://localhost:8080/api/v1/bill?issuing=${bill.issuing.id}&receiver=${bill.receiver.id}`,
       bill,
-      { headers: this.headers }
+      { headers: this.header }
+    );
+    return response;
+  }
+
+  login(username: string, pass: string) {
+    var response = this.http.post<boolean>(
+      `http://localhost:8080/api/v1/auth?username=${username}&password=${pass}`,
+      {}
     );
     return response;
   }
