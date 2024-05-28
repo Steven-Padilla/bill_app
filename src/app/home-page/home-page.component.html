@@ -3,36 +3,623 @@
     Bienvenido a <span class="text-[#fe6960]"> Billing App </span>
   </h1>
 </header>
-
-<section>
+<!-- Modal toggle -->
+<button
+  data-modal-target="crud-modal"
+  data-modal-toggle="crud-modal"
+  (click)="clearData()"
+  class="flex text-white bg-appRed hover:bg-green-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all"
+  type="button"
+>
+  <svg
+    class="me-1 -ms-1 w-5 h-5"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+      clip-rule="evenodd"
+    ></path>
+  </svg>
+  Crear factura
+</button>
+<section class="py-10">
   <table class="w-full text-sm text-left text-gray-500">
     <thead
-      class="text-xs text-gray-700 uppercase bg-gray-100 [&>tr>th]:px-6 [&>tr>th]:py-3"
+      class="text-xs text-gray-700 uppercase bg-gray-100 [&>tr>th]:px-6 [&>tr>th]:py-3 [&>tr>th]:text-center"
     >
       <tr class="rounded-3xl">
-        <th scope="col" class="">ID</th>
-        <th scope="col" class="">Folio</th>
-        <th scope="col" class="">Serie</th>
-        <th scope="col" class="">Fecha</th>
-        <th scope="col" class="">Forma de pago</th>
-        <th scope="col" class="">Total</th>
-        <th scope="col" class="">Acciones</th>
+        <th scope="col">ID</th>
+        <th scope="col">Folio</th>
+        <th scope="col">Serie</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Forma de pago</th>
+        <th scope="col">Total</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (bill of listData; track bill.id) {
-      <tr class="[&>td]:px-6 [&>td]:py-3 text-pretty">
+      <tr class="[&>td]:px-6 [&>td]:py-3 [&>td]:text-center text-pretty">
         <td scope="col">{{ bill.id }}</td>
         <td scope="col">{{ bill.invoice }}</td>
         <td scope="col">{{ bill.serialNumber }}</td>
         <td scope="col">{{ bill.date }}</td>
         <td scope="col">{{ bill.paymentType }}</td>
         <td scope="col">{{ bill.total }}</td>
-        <td scope="col">
-          
+        <td
+          scope="col"
+          class="flex gap-2 justify-center [&>button]:transition-all [&>button]:duration-700 [&>button]:rounded-full"
+        >
+          <button
+            class="w-12 hover:bg-[#fefac2] p-1"
+            data-modal-toggle="crud-modal"
+            (click)="setForm(bill, 'edit')"
+            type="button"
+          >
+            <svg
+              viewBox="0 -0.5 25 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.2942 7.95881C13.5533 7.63559 13.5013 7.16358 13.178 6.90453C12.8548 6.64549 12.3828 6.6975 12.1238 7.02072L13.2942 7.95881ZM6.811 14.8488L7.37903 15.3385C7.38489 15.3317 7.39062 15.3248 7.39623 15.3178L6.811 14.8488ZM6.64 15.2668L5.89146 15.2179L5.8908 15.2321L6.64 15.2668ZM6.5 18.2898L5.7508 18.2551C5.74908 18.2923 5.75013 18.3296 5.75396 18.3667L6.5 18.2898ZM7.287 18.9768L7.31152 19.7264C7.36154 19.7247 7.41126 19.7181 7.45996 19.7065L7.287 18.9768ZM10.287 18.2658L10.46 18.9956L10.4716 18.9927L10.287 18.2658ZM10.672 18.0218L11.2506 18.4991L11.2571 18.491L10.672 18.0218ZM17.2971 10.959C17.5562 10.6358 17.5043 10.1638 17.1812 9.90466C16.8581 9.64552 16.386 9.69742 16.1269 10.0206L17.2971 10.959ZM12.1269 7.02052C11.8678 7.34365 11.9196 7.81568 12.2428 8.07484C12.5659 8.33399 13.0379 8.28213 13.2971 7.95901L12.1269 7.02052ZM14.3 5.50976L14.8851 5.97901C14.8949 5.96672 14.9044 5.95412 14.9135 5.94123L14.3 5.50976ZM15.929 5.18976L16.4088 4.61332C16.3849 4.59344 16.3598 4.57507 16.3337 4.5583L15.929 5.18976ZM18.166 7.05176L18.6968 6.52192C18.6805 6.50561 18.6635 6.49007 18.6458 6.47532L18.166 7.05176ZM18.5029 7.87264L19.2529 7.87676V7.87676L18.5029 7.87264ZM18.157 8.68976L17.632 8.15412C17.6108 8.17496 17.5908 8.19704 17.5721 8.22025L18.157 8.68976ZM16.1271 10.0203C15.8678 10.3433 15.9195 10.8153 16.2425 11.0746C16.5655 11.3339 17.0376 11.2823 17.2969 10.9593L16.1271 10.0203ZM13.4537 7.37862C13.3923 6.96898 13.0105 6.68666 12.6009 6.74805C12.1912 6.80943 11.9089 7.19127 11.9703 7.60091L13.4537 7.37862ZM16.813 11.2329C17.2234 11.1772 17.5109 10.7992 17.4552 10.3888C17.3994 9.97834 17.0215 9.69082 16.611 9.74659L16.813 11.2329ZM12.1238 7.02072L6.22577 14.3797L7.39623 15.3178L13.2942 7.95881L12.1238 7.02072ZM6.24297 14.359C6.03561 14.5995 5.91226 14.9011 5.89159 15.218L7.38841 15.3156C7.38786 15.324 7.38457 15.3321 7.37903 15.3385L6.24297 14.359ZM5.8908 15.2321L5.7508 18.2551L7.2492 18.3245L7.3892 15.3015L5.8908 15.2321ZM5.75396 18.3667C5.83563 19.1586 6.51588 19.7524 7.31152 19.7264L7.26248 18.2272C7.25928 18.2273 7.25771 18.2268 7.25669 18.2264C7.25526 18.2259 7.25337 18.2249 7.25144 18.2232C7.2495 18.2215 7.24825 18.2198 7.24754 18.2185C7.24703 18.2175 7.24637 18.216 7.24604 18.2128L5.75396 18.3667ZM7.45996 19.7065L10.46 18.9955L10.114 17.536L7.11404 18.247L7.45996 19.7065ZM10.4716 18.9927C10.7771 18.9151 11.05 18.7422 11.2506 18.499L10.0934 17.5445C10.0958 17.5417 10.0989 17.5397 10.1024 17.5388L10.4716 18.9927ZM11.2571 18.491L17.2971 10.959L16.1269 10.0206L10.0869 17.5526L11.2571 18.491ZM13.2971 7.95901L14.8851 5.97901L13.7149 5.04052L12.1269 7.02052L13.2971 7.95901ZM14.9135 5.94123C15.0521 5.74411 15.3214 5.6912 15.5243 5.82123L16.3337 4.5583C15.4544 3.99484 14.2873 4.2241 13.6865 5.0783L14.9135 5.94123ZM15.4492 5.7662L17.6862 7.6282L18.6458 6.47532L16.4088 4.61332L15.4492 5.7662ZM17.6352 7.58161C17.7111 7.6577 17.7535 7.761 17.7529 7.86852L19.2529 7.87676C19.2557 7.36905 19.0555 6.88127 18.6968 6.52192L17.6352 7.58161ZM17.7529 7.86852C17.7524 7.97604 17.7088 8.07886 17.632 8.15412L18.682 9.22541C19.0446 8.87002 19.2501 8.38447 19.2529 7.87676L17.7529 7.86852ZM17.5721 8.22025L16.1271 10.0203L17.2969 10.9593L18.7419 9.15928L17.5721 8.22025ZM11.9703 7.60091C12.3196 9.93221 14.4771 11.5503 16.813 11.2329L16.611 9.74659C15.0881 9.95352 13.6815 8.89855 13.4537 7.37862L11.9703 7.60091Z"
+                fill="#000000"
+              />
+            </svg>
+          </button>
+          <button
+            data-modal-toggle="crud-modal"
+            class="w-10 p-1 hover:bg-[#d2fdfe]"
+            (click)="setForm(bill, 'view')"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+                stroke="#000000"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+                stroke="#000000"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            data-modal-target="deleteModal"
+            data-modal-toggle="deleteModal"
+            (click)="setDeleteItem(bill.id)"
+            class="w-11 p-1 hover:bg-[#fe6960] hover:text-white"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
+                  stroke="#000000"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+          </button>
         </td>
       </tr>
       }
     </tbody>
   </table>
 </section>
+
+<!-- Main modal -->
+<div
+  id="crud-modal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="hidden fixed top-0 right-0 left-0 z-[50] justify-center items-center w-full h-modal max-h-min"
+>
+  <div class="relative p-4 w-full max-w-4xl">
+    <!-- Modal content -->
+    <div
+      class="relative bg-white p-4 max-h-screen overflow-y-auto rounded-lg shadow"
+    >
+      <!-- Modal header -->
+      <div
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+      >
+        <h3 class="text-lg font-semibold text-gray-900">
+          @if (modalAction == "edit") { Editar } @else if (modalAction=="new")
+          {Nueva} Factura @if (modalAction=="edit"||modalAction=="view") { #{{
+            formBill.value.id
+          }}}
+        </h3>
+        <button
+          type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+          data-modal-toggle="crud-modal"
+        >
+          <svg
+            class="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="grid gap-4 mb-4 grid-cols-2">
+        <form
+          class="p-4 md:p-5 col-span-2 grid gap-4 mb-4 grid-cols-2"
+          [formGroup]="formBill"
+        >
+          <div class="col-span-2">
+            <label
+              for="serialNumber"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Serie</label
+            >
+            <input
+              type="number"
+              name="serialNumber"
+              formControlName="serialNumber"
+              value="{{ formBill.value.serialNumber }}"
+              id="serialNumber"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              placeholder="Numero de serie de la factura"
+              required
+            />
+          </div>
+          <div class="col-span-2">
+            <label
+              for="folio"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Folio</label
+            >
+            <input
+              type="number"
+              name="folio"
+              id="folio"
+              formControlName="folio"
+              value="{{ formBill.value.folio }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              placeholder="Folio"
+              required="true"
+            />
+          </div>
+          <div class="col-span-2">
+            <label
+              for="date"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Fecha</label
+            >
+            <input
+              id="date"
+              type="text"
+              formControlName="date"
+              value="{{ formBill.value.date }}"
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Selecciona una fecha"
+            />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="total"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Total</label
+            >
+
+            <input
+              type="number"
+              name="total"
+              id="total"
+              formControlName="total"
+              value="{{ formBill.value.total }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              placeholder="$"
+              required="true"
+            />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="paymentType"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Tipo de pago</label
+            >
+            <select
+              id="paymentType"
+              formControlName="paymentType"
+              name="paymentType"
+              value="{{ formBill.value.paymentType }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+            >
+              <option value="Targeta">Targeta</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="issuing"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Emisor</label
+            >
+            <select
+              id="issuing"
+              formControlName="issuingId"
+              name="issuing"
+              value="{{ formBill.value.issuingId }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+            >
+              @for (single of listIssuing; track $index) {
+
+              <option value="{{ single.id }}">
+                {{ single.name }}
+              </option>
+              }
+            </select>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="receiver"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Receptor</label
+            >
+            <select
+              id="receiver"
+              formControlName="receiverId"
+              name="receiver"
+              value="{{ formBill.value.receiverId }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+            >
+              @for (single of listReceiver; track $index) {
+
+              <option value="{{ single.id }}">
+                {{ single.name }}
+              </option>
+              }
+            </select>
+          </div>
+        </form>
+
+        @for (singleDetails of listDetailsHandler; track $index) {
+        <div
+          class="p-2 border rounded-md {{
+            listDetailsHandler.length > 1 ? 'col-span-1' : 'col-span-2'
+          }}"
+          id="accordion-color"
+          data-accordion="collapse"
+          data-active-classes="bg-blue-100 text-blue-600"
+        >
+          <h2 class="text-center text-2xl text-pretty font-medium text-appRed">
+            Detalle #{{ $index + 1 }}
+          </h2>
+          <hr class="text-black" />
+          <form
+            class="grid gap-4 mb-4 grid-cols-2"
+            [formGroup]="listDetailsHandler[$index]"
+          >
+            <div class="col-span-1 pt-3">
+              <label
+                for="itemDetail"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Artículo</label
+              >
+              <input
+                type="text"
+                name="item"
+                id="item"
+                formControlName="item"
+                value="{{ listDetailsHandler[$index].value.item }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                placeholder="Ingrea un articulo"
+                required="true"
+              />
+            </div>
+            <div class="col-span-1 pt-3">
+              <label
+                for="price"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Precio</label
+              >
+              <input
+                type="number"
+                name="singlePrice"
+                id="singlePrice"
+                formControlName="singlePrice"
+                value="{{ listDetailsHandler[$index].value.singlePrice }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                placeholder="Precio del artículo"
+                required="true"
+              />
+            </div>
+            <div class="col-span-1">
+              <label
+                for="quantity"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Cantidad</label
+              >
+              <input
+                type="number"
+                name="quantity"
+                id="quantity"
+                formControlName="quantity"
+                value="{{ listDetailsHandler[$index].value.quantity }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                placeholder="Cantidad de artículos"
+                required="true"
+              />
+            </div>
+            <div class="col-span-1">
+              <label
+                for="detailTotal"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >total</label
+              >
+              <input
+                type="number"
+                name="detailTotal"
+                id="detailTotal"
+                disabled
+                value="{{
+                  listDetailsHandler[$index].value.quantity *
+                    listDetailsHandler[$index].value.singlePrice
+                }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                placeholder="Total"
+                required="true"
+              />
+            </div>
+            <div class="col-span-2">
+              <label
+                for="description"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Descripción</label
+              >
+              <input
+                type="text"
+                name="description"
+                id="description"
+                formControlName="description"
+                value="{{ listDetailsHandler[$index].value.description }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                placeholder="Ingresa una descripción"
+                required="true"
+              />
+            </div>
+          </form>
+          @if (modalAction!="view") {
+
+          <div class="flex justify-center">
+            @if (listDetailsHandler.length>1) {
+            <button
+              (click)="deleteDetailLocal(singleDetails.value.id)"
+              type="button"
+              class="text-white inline-flex items-center bg-appRed hover:bg-red-600 transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Eliminar
+            </button>
+            }
+          </div>
+          }
+        </div>
+
+        }
+      </div>
+      @if (modalAction!="view") {
+      <div class="flex gap-4 flex-row-reverse">
+        <button
+          data-modal-toggle="crud-modal"
+          data-modal-target="deleteDetail"
+          data-modal-toggle="deleteDetail"
+          class="text-xl text-white hover:text-black items-center bg-green-500 w-full hover:border hover:bg-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center flex justify-center"
+        >
+          Confirmar cambios
+        </button>
+        <button
+          (click)="addDetail()"
+          type="button"
+          class="text-xl text-white hover:text-black items-center bg-appOrange w-full hover:border hover:bg-white transition-all duration-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center flex justify-center"
+        >
+          <svg
+            class="me-1 -ms-1 w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          Agregar detalle
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Delete Detail -->
+<div
+  id="deleteDetail"
+  tabindex="2"
+  aria-hidden="true"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[100] justify-center items-center w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <!-- Modal content -->
+    <div
+      class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+    >
+      <button
+        type="button"
+        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        data-modal-toggle="deleteDetail"
+      >
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100"
+        class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+        height="100"
+        viewBox="0 0 100 100"
+        id="warning"
+      >
+        <g>
+          <path
+            d="M87.5 77.8L51.6 20c-.8-1.3-2.6-1.3-3.4 0L12.3 78c1.5-2.4-2.7 3 1.7 3.1h72c4-.1.7-4.3 1.5-3.3zM17.6 77l32.3-52.1L82.4 77H17.6zM52 39v16c0 1.1-.9 2-2 2s-2-.9-2-2V39c0-1.1.9-2 2-2s2 .9 2 2zm-1.9 22c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6c-.1-3.3-2.8-6-6-6zm0 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2c-.1 1.1-1 2-2 2z"
+          ></path>
+        </g>
+        <g>
+          <path
+            fill="#00F"
+            d="M1644-1070V614H-140v-1684h1784m8-8H-148V622h1800v-1700z"
+          ></path>
+        </g>
+      </svg>
+      <p class="mb-4 text-gray-500 dark:text-gray-300">
+        ¿Estás seguro aplicar los cambios?
+      </p>
+      @if (detailsIdToDelete!.length >=1 && modalAction !="new") {
+
+      <p class="mb-4 text-gray-500 dark:text-gray-300">
+        Se eliminarán algunos detalles
+      </p>
+      <p class="text-red-800 font-semibold mb-4">***Accion Irrevercible***</p>
+      }
+      <div class="flex justify-center items-center space-x-4">
+        <button
+          data-modal-toggle="deleteDetail"
+          type="button"
+          class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        >
+          No, cancelar
+        </button>
+        <button
+          data-modal-toggle="deleteDetail"
+          (click)="onSubmit()"
+          type="submit"
+          class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+        >
+          Si, Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete modal -->
+<div
+  id="deleteModal"
+  tabindex="2"
+  aria-hidden="true"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[100] justify-center items-center w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <!-- Modal content -->
+    <div
+      class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+    >
+      <button
+        type="button"
+        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        data-modal-toggle="deleteModal"
+      >
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+      <svg
+        class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+        aria-hidden="true"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <p class="mb-4 text-gray-500 dark:text-gray-300">
+        Estás seguro de borrar esta factura?
+      </p>
+      <p class="text-red-800 font-semibold mb-4">***Accion Irrevercible***</p>
+      <div class="flex justify-center items-center space-x-4">
+        <button
+          data-modal-toggle="deleteModal"
+          type="button"
+          class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        >
+          No, cancelar
+        </button>
+        <button
+          data-modal-toggle="deleteModal"
+          (click)="deleteBill()"
+          type="submit"
+          class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+        >
+          Si, borrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

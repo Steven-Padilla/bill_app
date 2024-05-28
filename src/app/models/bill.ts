@@ -1,5 +1,5 @@
-import { BillDetails } from "./billdetails";
-import { Stakeholder } from "./stakeholder";
+import { BillDetails } from './billdetails';
+import { Stakeholder } from './stakeholder';
 
 export class Bill {
   id: number;
@@ -33,5 +33,19 @@ export class Bill {
     this.receiver = receiver;
     this.issuing = issuing;
     this.billDetails = billDetails;
+  }
+
+  public static get getEmtyBill(): Bill {
+    return new Bill(
+      -1,
+      -1,
+      -1,
+      '',
+      '',
+      -1,
+      new Stakeholder(-1, '', '', ''),
+      new Stakeholder(-1, '', '', ''),
+      []
+    );
   }
 }

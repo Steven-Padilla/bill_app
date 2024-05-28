@@ -1,9 +1,31 @@
 /** @type {import('tailwindcss').Config} */
+const colors = import("tailwindcss/colors.js");
 module.exports = {
-  content: ["./src/**/*.{html,ts}"],
+  content: ["./src/**/*.{html,ts}", "./node_modules/flowbite/**/*.js"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        ...colors,
+        appRed: "#fe6960",
+        appOrange: "#febf97",
+        appYellow: "#fefac2",
+        appLightBlue: "#d2fdfe",
+        appTeal: "#affbff",
+        primary: {
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
+        },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };
-
